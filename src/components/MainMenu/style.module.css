@@ -1,0 +1,52 @@
+
+.mainmenu {
+  position: absolute;
+  background-color: #181818d8;
+  transition-property: width, height;
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.25s;
+  width: 3em;
+  height: 3em;
+  left: 1vw;
+  top: 1vh;
+  overflow: hidden;
+  font-family: 'Courier New', Courier, monospace;
+}
+.mainmenu_show {
+  width: 98vw;
+  height: 98vh;
+}
+.toggle {
+  background-image: url("src/assets/hamburger.svg");
+  background-size: contain;
+  width: 3em;
+  height: 3em;
+  background-color: #111011;
+  border: none;
+  border-radius: 0.5em;
+  margin: 0.25em;
+  cursor: pointer;
+}
+.toggle:hover {
+  background-color: #332e33;
+}
+
+.content {
+  margin: 0;
+  padding: 0;
+  width: 98vw;
+  height: 98vh;
+}
+.menuitem {
+  flex: 1;
+  background-color: #2c242c;
+  margin: 0.25em;
+  padding: 0.5em;
+  border-radius: 0.25em;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+.menuitem:hover {
+  background-color: #423142;
+}
