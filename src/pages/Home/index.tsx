@@ -147,6 +147,7 @@ export class Home extends Component<Props, State> {
         <span className={style.blockline_index}>{lineNumber}</span>
       }
       {blocks}
+      {/* <div className={style.blockline_overflow} /> */}
     </div>
   }
   renderBlockView() {
@@ -200,7 +201,11 @@ export class Home extends Component<Props, State> {
             //update the render
             this.forceUpdate();
           }}
-        />);
+        />,
+        <button className={
+          `${style.blockaction} ${style.blockaction_btn}`
+        }>Edit</button>
+        );
       } break;
       case BT.F_CALL: {
         result.push(<input
