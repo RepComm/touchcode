@@ -21,6 +21,7 @@ interface BlockLine {
 export interface State {
   lines: Array<BlockLine>;
   selectedBlock?: Block;
+  createBlockType?: BT;
 }
 
 export enum BT {
@@ -68,7 +69,7 @@ export class Home extends Component<Props, State> {
       ]
     };
   }
-  renderBlock(b: Block) {
+  renderBlock(b: Block, isActive: boolean = true) {
     let argsStr: string = undefined;
 
     if (b.t === BT.F_CALL && b.args) {
@@ -88,9 +89,18 @@ export class Home extends Component<Props, State> {
     return <div
       className={style.block}
       onClick={() => {
-        this.setState({
-          selectedBlock: b
-        })
+
+        if (isActive) {
+          //select existing block
+          this.setState({
+            selectedBlock: b
+          });
+        } else {
+          //set creating block type
+          this.setState({
+            createBlockType: b.t
+          });
+        }
       }}
     >
       {BT_to_str(b.t)}
@@ -100,7 +110,7 @@ export class Home extends Component<Props, State> {
       {argsStr !== undefined &&
         <span>({argsStr})</span>
       }
-      { b.t === BT.F_DEF &&
+      { isActive && b.t === BT.F_DEF &&
         <span>&#123; ... &#125;</span>
       }
 
@@ -119,14 +129,19 @@ export class Home extends Component<Props, State> {
       ref={lineRef}
       className={style.blockline}
       onWheel={(evt) => {
+        //deltaY = 0 usually means the browser will handle the scroll just fine
+        //because an optical mouse usually doesn't do deltaX
+        //this handles track pads/touch via native browser behavior
+        //and we handle deltaY for optical mouse below
+        if (evt.deltaY === 0) return;
         evt.preventDefault();
+
         const t = lineRef.current;
-        const d = evt.deltaY;
+        let d = evt.deltaY;
         t.scrollBy({
           left: d,
           behavior: "smooth"
         });
-        // t.scrollLeft += d;
       }}>
       {lineNumber !== undefined &&
         <span className={style.blockline_index}>{lineNumber}</span>
@@ -224,9 +239,9 @@ export class Home extends Component<Props, State> {
         </div>
         {this.renderBlockView()}
         <div className={style.pallette}>
-          {this.renderBlock({ t: BT.F_DEF })}
-          {this.renderBlock({ t: BT.F_CALL })}
-          {this.renderBlock({ t: BT.C_LINE })}
+          {this.renderBlock({ t: BT.F_DEF }, false)}
+          {this.renderBlock({ t: BT.F_CALL }, false)}
+          {this.renderBlock({ t: BT.C_LINE }, false)}
         </div>
       </div>
     </div>
